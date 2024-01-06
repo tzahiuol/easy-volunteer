@@ -1,10 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
-import { Question } from './question.entity';
-import { UserAnswers } from './user_answers.entity';
-import { Skill } from './skill';
+import { QuestionEntity } from './question.entity';
+import { UserAnswersEntity } from './user_answers.entity';
+import { SkillEntity } from './skill';
 
 @Entity()
-export class Answer {
+export class AnswerEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -14,14 +14,14 @@ export class Answer {
     @Column()
     order: number;
 
-    @ManyToOne(type => Question, question => question.answers)
-    question: Question;
+    @ManyToOne(type => QuestionEntity, question => question.answers)
+    question: QuestionEntity;
 
-    @OneToMany(type => UserAnswers, userAnswers => userAnswers.answer)
-    userAnswers: UserAnswers[];
+    @OneToMany(type => UserAnswersEntity, userAnswers => userAnswers.answer)
+    userAnswers: UserAnswersEntity[];
 
-    @ManyToMany(type => Skill)
+    @ManyToMany(type => SkillEntity)
     @JoinTable({name: 'answer_skills'})
-    skills: Skill[];
+    skills: SkillEntity[];
 
 }

@@ -1,10 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany } from 'typeorm';
-import { UserAnswers } from './user_answers.entity';
-import { Institution } from './institution.entity';
-import { InstitutionPositionTimeSlot } from './institution_position_timeslot';
+import { UserAnswersEntity } from './user_answers.entity';
+import { InstitutionEntity } from './institution.entity';
+import { InstitutionPositionTimeSlotEntity } from './institution_position_timeslot';
 
 @Entity()
-export class User {
+export class UserEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,17 +18,23 @@ export class User {
   email: string;
 
   @Column()
+  password: string;
+
+  @Column()
+  salt: string
+
+  @Column()
   lastName: string;
 
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(type => UserAnswers, userAnswers => userAnswers.user)
-  userAnswers: UserAnswers[];
+  @OneToMany(type => UserAnswersEntity, userAnswers => userAnswers.user)
+  userAnswers: UserAnswersEntity[];
 
-  @OneToMany(type => Institution, institution => institution.owner)
-  ownedInstitutions: Institution[];
+  @OneToMany(type => InstitutionEntity, institution => institution.owner)
+  ownedInstitutions: InstitutionEntity[];
 
-  @ManyToMany(type => InstitutionPositionTimeSlot)
-  institutionPositionTimeSlots: InstitutionPositionTimeSlot[];
+  @ManyToMany(type => InstitutionPositionTimeSlotEntity)
+  institutionPositionTimeSlots: InstitutionPositionTimeSlotEntity[];
 }

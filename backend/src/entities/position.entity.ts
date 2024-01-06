@@ -1,23 +1,23 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, ManyToMany, JoinTable, OneToOne, JoinColumn } from 'typeorm';
-import { Question } from './question.entity';
-import { UserAnswers } from './user_answers.entity';
-import { Skill } from './skill';
-import { User } from './user.entity';
-import { InstitutionPosition } from './institution_position';
+import { QuestionEntity } from './question.entity';
+import { UserAnswersEntity } from './user_answers.entity';
+import { SkillEntity } from './skill';
+import { UserEntity } from './user.entity';
+import { InstitutionPositionEntity } from './institution_position';
 
 @Entity()
-export class Position {
+export class PositionEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
     name: string;
     
-    @OneToOne(() => Skill)
+    @OneToOne(() => SkillEntity)
     @JoinColumn()
-    requiredSkill: Skill;
+    requiredSkill: SkillEntity;
 
-    @OneToMany(type => InstitutionPosition, instpos => instpos.position)
-    institutionPositions: InstitutionPosition[];
+    @OneToMany(type => InstitutionPositionEntity, instpos => instpos.position)
+    institutionPositions: InstitutionPositionEntity[];
 
 }

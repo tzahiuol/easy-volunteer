@@ -1,20 +1,20 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
-import { Answer } from './answer.entity';
-import { Question } from './question.entity';
-import { User } from './user.entity';
+import { AnswerEntity } from './answer.entity';
+import { QuestionEntity } from './question.entity';
+import { UserEntity } from './user.entity';
 
 @Entity()
-export class UserAnswers {
+export class UserAnswersEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => Answer, answer => answer.userAnswers)
-  answer: Answer;
+  @ManyToOne(type => AnswerEntity, answer => answer.userAnswers)
+  answer: AnswerEntity;
 
-  @ManyToOne(type => Question, question => question.userAnswers)
-  question: Question;
+  @ManyToOne(type => QuestionEntity, question => question.userAnswers)
+  question: QuestionEntity;
 
-  @ManyToOne(type => User, user => user.userAnswers)
-  user: User;
+  @ManyToOne(type => UserEntity, user => user.userAnswers)
+  user: UserEntity;
 
 }
