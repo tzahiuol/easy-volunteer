@@ -14,10 +14,10 @@ export class AnswerEntity {
     @Column()
     order: number;
 
-    @ManyToOne(type => QuestionEntity, question => question.answers)
+    @ManyToOne(type => QuestionEntity, question => question.answers, { onDelete: 'CASCADE' })
     question: QuestionEntity;
 
-    @OneToMany(type => UserAnswersEntity, userAnswers => userAnswers.answer)
+    @OneToMany(type => UserAnswersEntity, userAnswers => userAnswers.answer, { onDelete: 'CASCADE' })
     userAnswers: UserAnswersEntity[];
 
     @ManyToMany(type => SkillEntity)

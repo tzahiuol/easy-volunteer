@@ -1,9 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, Unique } from 'typeorm';
 import { AnswerEntity } from './answer.entity';
 import { QuestionEntity } from './question.entity';
 import { UserEntity } from './user.entity';
 
 @Entity()
+@Unique('question_user', ['question', 'user'])
 export class UserAnswersEntity {
   @PrimaryGeneratedColumn()
   id: number;

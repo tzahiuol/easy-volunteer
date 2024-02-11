@@ -10,10 +10,10 @@ export class QuestionEntity {
   @Column()
   question: string;
 
-  @OneToMany(type => AnswerEntity, answer => answer.question)
+  @OneToMany(type => AnswerEntity, answer => answer.question, { onDelete: 'CASCADE' })
   answers: AnswerEntity[];
 
-  @OneToMany(type => UserAnswersEntity, userAnswers => userAnswers.question)
+  @OneToMany(type => UserAnswersEntity, userAnswers => userAnswers.question, { onDelete: 'CASCADE' })
   userAnswers: UserAnswersEntity[];
 
 }

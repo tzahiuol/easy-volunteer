@@ -29,10 +29,10 @@ export class UserEntity {
   @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(type => UserAnswersEntity, userAnswers => userAnswers.user)
+  @OneToMany(type => UserAnswersEntity, userAnswers => userAnswers.user, { onDelete: 'CASCADE' })
   userAnswers: UserAnswersEntity[];
 
-  @OneToMany(type => InstitutionEntity, institution => institution.owner)
+  @OneToMany(type => InstitutionEntity, institution => institution.owner, { onDelete: 'CASCADE' })
   ownedInstitutions: InstitutionEntity[];
 
   @ManyToMany(type => InstitutionPositionTimeSlotEntity)

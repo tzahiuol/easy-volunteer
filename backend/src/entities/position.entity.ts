@@ -17,7 +17,7 @@ export class PositionEntity {
     @JoinColumn()
     requiredSkill: SkillEntity;
 
-    @OneToMany(type => InstitutionPositionEntity, instpos => instpos.position)
+    @OneToMany(type => InstitutionPositionEntity, instpos => instpos.position, { onDelete: 'CASCADE' })
     institutionPositions: InstitutionPositionEntity[];
 
 }

@@ -14,10 +14,10 @@ export class InstitutionEntity {
     @Column()
     name: string;
 
-    @ManyToOne(type => UserEntity, user => user.ownedInstitutions)
+    @ManyToOne(type => UserEntity, user => user.ownedInstitutions, { onDelete: 'CASCADE' })
     owner: UserEntity;
 
-    @OneToMany(type => InstitutionPositionEntity, instpos => instpos.institution)
+    @OneToMany(type => InstitutionPositionEntity, instpos => instpos.institution, { onDelete: 'CASCADE' })
     institutionPositions: InstitutionPositionEntity[];
 
 }
