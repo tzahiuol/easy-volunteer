@@ -24,4 +24,13 @@ export class InstitutionPositionEntity {
     @OneToMany(type => InstitutionPositionTimeSlotEntity, instpostimeslot => instpostimeslot.institutionPosition)
     timeslots: InstitutionPositionEntity[];
 
+    @Column()
+    country: string;
+
+    @Column()
+    city: string;
+
+    @Column()
+    fullAddress: string;
+
 }
