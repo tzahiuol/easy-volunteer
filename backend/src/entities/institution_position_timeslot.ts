@@ -7,7 +7,7 @@ import { UserEntity } from './user.entity';
 import { PositionEntity } from './position.entity';
 import { InstitutionPositionEntity } from './institution_position';
 
-@Entity()
+@Entity({name:"institution_position_timeslots"})
 export class InstitutionPositionTimeSlotEntity {
     @PrimaryGeneratedColumn()
     id: number;
@@ -25,7 +25,7 @@ export class InstitutionPositionTimeSlotEntity {
     institutionPosition: InstitutionPositionEntity;
 
     @ManyToMany(type => UserEntity)
-    @JoinTable()
+    @JoinTable({name: "user_institution_position_timeslots"})
     users: UserEntity[];
 
 

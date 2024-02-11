@@ -3,7 +3,7 @@ import { QuestionEntity } from './question.entity';
 import { UserAnswersEntity } from './user_answers.entity';
 import { SkillEntity } from './skill';
 
-@Entity()
+@Entity({name:"answers"})
 export class AnswerEntity {
     @PrimaryGeneratedColumn()
     id: number;

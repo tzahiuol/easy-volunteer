@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'ty
 import { AnswerEntity } from './answer.entity';
 import { UserAnswersEntity } from './user_answers.entity';
 
-@Entity()
+@Entity({name:"questions"})
 export class QuestionEntity {
   @PrimaryGeneratedColumn()
   id: number;

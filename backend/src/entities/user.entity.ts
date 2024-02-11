@@ -3,7 +3,7 @@ import { UserAnswersEntity } from './user_answers.entity';
 import { InstitutionEntity } from './institution.entity';
 import { InstitutionPositionTimeSlotEntity } from './institution_position_timeslot';
 
-@Entity()
+@Entity({name: 'users'})
 export class UserEntity {
 
   @PrimaryGeneratedColumn()

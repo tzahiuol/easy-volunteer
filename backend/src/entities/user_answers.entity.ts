@@ -3,7 +3,7 @@ import { AnswerEntity } from './answer.entity';
 import { QuestionEntity } from './question.entity';
 import { UserEntity } from './user.entity';
 
-@Entity()
+@Entity({"name":"user_answers"})
 @Unique('question_user', ['question', 'user'])
 export class UserAnswersEntity {
   @PrimaryGeneratedColumn()

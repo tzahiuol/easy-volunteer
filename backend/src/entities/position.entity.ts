@@ -5,7 +5,7 @@ import { SkillEntity } from './skill';
 import { UserEntity } from './user.entity';
 import { InstitutionPositionEntity } from './institution_position';
 
-@Entity()
+@Entity({name:"positions"})
 export class PositionEntity {
     @PrimaryGeneratedColumn()
     id: number;
