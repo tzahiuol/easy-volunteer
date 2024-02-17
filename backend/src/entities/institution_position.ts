@@ -18,14 +18,14 @@ export class InstitutionPositionEntity {
     @ManyToOne(type => InstitutionEntity, institution => institution.institutionPositions)
     institution: InstitutionEntity;
   
-    @ManyToOne(type => PositionEntity, position => position.institutionPositions)
+    @ManyToOne(type => PositionEntity, position => position.institutionPositions, { onDelete: 'CASCADE' })
     position: PositionEntity;
 
     @OneToMany(type => InstitutionPositionTimeSlotEntity, instpostimeslot => instpostimeslot.institutionPosition)
     timeslots: InstitutionPositionEntity[];
 
-    @Column()
-    country: string;
+    @Column({length: 2})
+    country_code: string;
 
     @Column()
     city: string;

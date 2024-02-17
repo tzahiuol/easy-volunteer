@@ -25,7 +25,6 @@ export class QuestionService {
     }
 
     async getQuestionsForAnswer(): Promise<QuestionEntity[]> {
-
         return await this.questionRepository.find({ relations: ["answers"] });
     }
 

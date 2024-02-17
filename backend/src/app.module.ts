@@ -15,6 +15,8 @@ import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 import { QuestionService } from './question/question.service';
 import { QuestionController } from './question/question.controller';
+import { InstitutionPositionsController } from './institution_positions/institution_positions.controller';
+import { InstitutionPositionsService } from './institution_positions/institution_positions.service';
 
 const entities = [UserEntity, QuestionEntity, AnswerEntity, UserAnswersEntity, SkillEntity, InstitutionEntity, PositionEntity, InstitutionPositionEntity, InstitutionPositionTimeSlotEntity]
 
@@ -32,7 +34,7 @@ const entities = [UserEntity, QuestionEntity, AnswerEntity, UserAnswersEntity, S
     }),
     TypeOrmModule.forFeature(entities)
   ],
-  controllers: [AppController, UserController, QuestionController],
-  providers: [AppService, UserService, QuestionService],
+  controllers: [AppController, UserController, QuestionController, InstitutionPositionsController],
+  providers: [AppService, UserService, QuestionService, InstitutionPositionsService],
 })
 export class AppModule { }

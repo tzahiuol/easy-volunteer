@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, ManyToMany, JoinTable, Unique } from 'typeorm';
 import { QuestionEntity } from './question.entity';
 import { UserAnswersEntity } from './user_answers.entity';
 import { SkillEntity } from './skill';
@@ -12,7 +12,11 @@ export class InstitutionEntity {
     id: number;
 
     @Column()
+    @Unique("name",["name"])
     name: string;
+
+    @Column({type: 'blob', nullable: true})
+    logo: string
 
     @ManyToOne(type => UserEntity, user => user.ownedInstitutions, { onDelete: 'CASCADE' })
     owner: UserEntity;

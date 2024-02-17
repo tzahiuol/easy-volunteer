@@ -1,7 +1,8 @@
 import { QueryFailedError } from 'typeorm';
 import { CreateUserDto, LoginDto } from './user.dtos';
 import { UserService } from './user.service';
-import { Body, Controller, Get, Post, Req, Res, Session } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, Session, UseGuards } from '@nestjs/common';
+import { UserLoginGuard } from './user-login.guard';
 
 @Controller('user')
 export class UserController {
@@ -32,6 +33,15 @@ export class UserController {
             }
             response.status(500).send()
         }
+    }
 
+    @UseGuards(UserLoginGuard)
+    @Get("/me")
+    async me(@Session() session: Record<string, any>): Promise<any> {
+        return this.userService.getUser(session['user'].id);
+    }
+
+    @Get("/schedule")
+    async schedule(@Req() request, @Session() session: Record<string, any>): Promise<any> {
     }
 }

@@ -9,10 +9,10 @@ export class UserAnswersEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => AnswerEntity, answer => answer.userAnswers)
+  @ManyToOne(type => AnswerEntity, answer => answer.userAnswers,  { onDelete: 'CASCADE' })
   answer: AnswerEntity;
 
-  @ManyToOne(type => QuestionEntity, question => question.userAnswers)
+  @ManyToOne(type => QuestionEntity, question => question.userAnswers,  { onDelete: 'CASCADE' })
   question: QuestionEntity;
 
   @ManyToOne(type => UserEntity, user => user.userAnswers)
