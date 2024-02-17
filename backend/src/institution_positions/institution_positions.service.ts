@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { InstitutionPositionEntity } from 'src/entities/institution_position';
 import { InstitutionPositionTimeSlotEntity } from 'src/entities/institution_position_timeslot';
 import { UserEntity } from 'src/entities/user.entity';
-import { UserErrorMessage } from 'src/user-error-message/class';
+import { UserErrorMessageException } from 'src/user-error-message/class';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -30,13 +30,13 @@ export class InstitutionPositionsService {
 
         console.log(avaliable_positions)
         if (avaliable_positions.find((pos) => pos.id === timeslot.institutionPosition.position.id) === undefined) {
-            throw new UserErrorMessage('User does not have the required skills for this position')
+            throw new UserErrorMessageException('User does not have the required skills for this position')
         }
         if (timeslot.users.length >= timeslot.amountRequired) {
-            throw new UserErrorMessage('Timeslot is full')
+            throw new UserErrorMessageException('Timeslot is full')
         }
         if (timeslot.users.find((user) => user.id === user_id) !== undefined) {
-            throw new UserErrorMessage('User is already in this timeslot')
+            throw new UserErrorMessageException('User is already in this timeslot')
         }
         const user = await this.userRepo.findOne({ where: { id: user_id } });
         timeslot.users.push(user);

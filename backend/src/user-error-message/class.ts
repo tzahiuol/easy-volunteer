@@ -1,3 +1,3 @@
-export class UserErrorMessage extends Error {
+export class UserErrorMessageException extends Error {
     
 }
