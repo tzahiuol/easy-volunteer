@@ -6,6 +6,7 @@ import { InstitutionPositionTimeSlotEntity } from 'src/entities/institution_posi
 import { UserEntity } from 'src/entities/user.entity';
 import { UserErrorMessageException } from 'src/user-error-message/class';
 import { Repository } from 'typeorm';
+import { FilterInstitutionPositionsRequestDto } from './institution_positions.dtos';
 
 @Injectable()
 export class InstitutionPositionsService {
@@ -24,11 +25,9 @@ export class InstitutionPositionsService {
     }
 
     async addSchedule(institiution_position_timeslot_id: number, user_id: number): Promise<boolean> {
-        const timeslot = await this.institutionPositionTimeSlotRepo.findOne({ where: { id: institiution_position_timeslot_id }, relations: ['institutionPosition', 'institutionPosition.position','users'] });
-        console.log(timeslot)
+        const timeslot = await this.institutionPositionTimeSlotRepo.findOne({ where: { id: institiution_position_timeslot_id }, relations: ['institutionPosition', 'institutionPosition.position', 'users'] });
         const avaliable_positions = await this.userService.getUserAvaliablePositions(user_id);
 
-        console.log(avaliable_positions)
         if (avaliable_positions.find((pos) => pos.id === timeslot.institutionPosition.position.id) === undefined) {
             throw new UserErrorMessageException('User does not have the required skills for this position')
         }
@@ -44,6 +43,51 @@ export class InstitutionPositionsService {
 
         return true
 
+    }
+
+    async getCountries() {
+        const rawData: { "country_code": string, "cities": string }[] = await this.institutionPositionRepo.manager
+            .createQueryBuilder(InstitutionPositionEntity, "institution_position")
+            .addGroupBy("institution_position.country_code")
+            .select(["institution_position.country_code as country_code", "GROUP_CONCAT(DISTINCT(city) SEPARATOR ',') as cities"]).getRawMany()
+
+        return rawData.map((data) => {
+            return {
+                country_code: data.country_code,
+                cities: data.cities.split(",")
+            }
+        })
+    }
+
+    async filter(filterInstitutionPositionRequestDto: FilterInstitutionPositionsRequestDto, user_id: number): Promise<any> {
+        const avaliable_positions = await this.userService.getUserAvaliablePositions(user_id);
+
+        const query = this.institutionPositionTimeSlotRepo.createQueryBuilder("institution_position_timeslot")
+        query.innerJoinAndSelect("institution_position_timeslot.institutionPosition", "institution_position")
+
+        query.innerJoinAndSelect("institution_position.position", "position")
+        query.where("position.id IN (:...positions)", { positions: avaliable_positions.map((pos) => pos.id) })
+        if ( filterInstitutionPositionRequestDto.country_code) {
+            query.andWhere("country_code = :country_code", { country_code: filterInstitutionPositionRequestDto.country_code })
+        }
+
+        if ( filterInstitutionPositionRequestDto.city){
+            query.andWhere("city = :city", { city: filterInstitutionPositionRequestDto.city })
+        }
+
+        if ( filterInstitutionPositionRequestDto.from){
+            query.andWhere(" institution_position_timeslot.from >= STR_TO_DATE( :from , '%Y-%m-%d' ) ", { from: filterInstitutionPositionRequestDto.from })
+        }
+        if ( filterInstitutionPositionRequestDto.to){
+            query.andWhere(" institution_position_timeslot.to <= STR_TO_DATE( :to , '%Y-%m-%d' ) ", { to: filterInstitutionPositionRequestDto.to })
+        }
+
+        query.limit(10)
+
+        console.log(query.getSql())
+        console.log(query.getParameters())
+        return query.getMany()
 
     }
+    
 }
