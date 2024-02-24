@@ -25,8 +25,8 @@ const routes: Array<RouteRecordRaw> = [
         component : () => import('../pages/filter/Filter.vue'),
       },
       {
-        'name': 'questions',
-        path: 'questions',
+        'name': 'quiz',
+        path: 'quiz',
         component : () => import('../pages/questions/Questions.vue'),
       },
     ],
@@ -88,8 +88,8 @@ router.beforeEach(async (to, from, next) => {
     if (questionsStore.shouldAnswerQuestions === null) {
       await questionsStore.checkShouldAnswerQuestions()
     }
-    if (!to.path.includes('/panel/questions') && questionsStore.shouldAnswerQuestions === true) {
-      return next({ name: 'questions' })
+    if (!to.path.includes('/panel/quiz') && questionsStore.shouldAnswerQuestions === true) {
+      return next({ name: 'quiz' })
     }
   }
   next()

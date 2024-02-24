@@ -19,8 +19,8 @@ export default {
       },
     },
     {
-      name: 'questions',
-      displayName: 'Questions',
+      name: 'quiz',
+      displayName: 'Quiz',
       meta: {
         icon: 'ion-help',
       },

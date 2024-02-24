@@ -95,7 +95,7 @@ export default defineComponent({
 
     const shownNavigationRoutes = computed(() => {
       if (questionsStore.shouldAnswerQuestions) {
-        return navigationRoutes.routes.filter((route) => route.name === 'questions')
+        return navigationRoutes.routes.filter((route) => route.name === 'quiz')
       }
       return navigationRoutes.routes
     }) 
