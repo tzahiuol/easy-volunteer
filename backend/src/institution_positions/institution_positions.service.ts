@@ -6,7 +6,7 @@ import { InstitutionPositionTimeSlotEntity } from 'src/entities/institution_posi
 import { UserEntity } from 'src/entities/user.entity';
 import { UserErrorMessageException } from 'src/user-error-message/class';
 import { Repository } from 'typeorm';
-import { FilterInstitutionPositionsRequestDto } from './institution_positions.dtos';
+import { FilterInstitutionPositionsRequestDto } from './institution_positions.dto';
 
 @Injectable()
 export class InstitutionPositionsService {

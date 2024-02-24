@@ -43,9 +43,9 @@ async function createQuestionsAndPositions(app: INestApplicationContext) {
     const answersRepo: Repository<AnswerEntity> = app.get(getRepositoryToken(AnswerEntity));
     const skillRepo: Repository<SkillEntity> = app.get(getRepositoryToken(SkillEntity));
     const positionRepo: Repository<PositionEntity> = app.get(getRepositoryToken(PositionEntity));
-    
+
     const amountOfQuestions = await questionRepo.count()
-    
+
     console.log("Deleting all questions related")
     if (amountOfQuestions > 0) {
         await positionRepo.delete({})
@@ -136,14 +136,14 @@ const institutions = [
 ]
 function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+}
 async function CreateInstitutionAndInstitutionPositions(app: INestApplicationContext) {
     const institutionRepo: Repository<InstitutionEntity> = app.get(getRepositoryToken(InstitutionEntity));
     const institutionPositionRepo: Repository<InstitutionPositionEntity> = app.get(getRepositoryToken(InstitutionPositionEntity));
     const InstitutionPositionTimeSlotRepo: Repository<InstitutionPositionTimeSlotEntity> = app.get(getRepositoryToken(InstitutionPositionTimeSlotEntity));
     const positionRepo: Repository<PositionEntity> = app.get(getRepositoryToken(PositionEntity));
 
-    
+
     const amountOfInstitutions = await institutionRepo.count()
 
     console.log("Deleting institutions related")
@@ -176,7 +176,7 @@ async function CreateInstitutionAndInstitutionPositions(app: INestApplicationCon
                 slotEntity.from = slot.from
                 slotEntity.to = slot.to
                 slotEntity.institutionPosition = institutionPositionEntity
-                slotEntity.amountRequired = getRandomNumber(1,3)
+                slotEntity.amountRequired = getRandomNumber(1, 3)
                 await InstitutionPositionTimeSlotRepo.save(slotEntity)
             }
         }

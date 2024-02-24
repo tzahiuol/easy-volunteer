@@ -8,7 +8,7 @@ export class UserErrorMessageFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     response
-      .status(400)
+      .status(exception.statusCode)
       .json({
         message: exception.message
       });

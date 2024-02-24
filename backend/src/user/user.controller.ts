@@ -1,5 +1,5 @@
 import { QueryFailedError } from 'typeorm';
-import { CreateUserDto, LoginDto } from './user.dtos';
+import { CreateUserDto, LoginDto } from './user.dto';
 import { UserService } from './user.service';
 import { Body, Controller, Get, Post, Req, Res, Session, UseGuards } from '@nestjs/common';
 import { UserLoginGuard } from './user-login.guard';

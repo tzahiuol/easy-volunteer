@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Req, Session, UseGuards } from '@nestjs/common';
 import { InstitutionPositionsService } from './institution_positions.service';
 import { UserLoginGuard } from 'src/user/user-login.guard';
-import { FilterInstitutionPositionsRequestDto } from './institution_positions.dtos';
+import { FilterInstitutionPositionsRequestDto } from './institution_positions.dto';
 
 @Controller('institution-positions')
 @UseGuards(UserLoginGuard)

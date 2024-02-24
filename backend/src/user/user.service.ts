@@ -5,8 +5,9 @@ import { Connection, DataSource, Repository } from 'typeorm';
 
 import * as bcrypt from 'bcrypt';
 
-import { CreateUserDto, LoginDto } from './user.dtos';
+import { CreateUserDto, LoginDto } from './user.dto';
 import { PositionEntity } from 'src/entities/position.entity';
+import { UserErrorMessageException } from 'src/user-error-message/class';
 
 const saltRounds = 10
 
@@ -32,15 +33,15 @@ export class UserService {
     }
 
     async checkUserLogin(login: LoginDto) {
-        const user = await this.usersRepository.findOneBy({ email: login.email })
+        const user = await this.usersRepository.findOne({ where: {email: login.email }, select: ['id', 'password', 'salt','firstName', 'lastName', 'email'] })
         if (!user) {
-            return false
+            throw new UserErrorMessageException('Invalid authentication', 401)
         }
         const hashedPassword = await bcrypt.hash(login.password, user.salt)
         if (hashedPassword === user.password) {
             return user
         }
-        return false
+        throw new UserErrorMessageException('Invalid authentication', 401)
     }
 
     async getUser(id: number) {

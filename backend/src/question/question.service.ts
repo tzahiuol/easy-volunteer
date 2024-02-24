@@ -5,6 +5,7 @@ import { QuestionEntity } from 'src/entities/question.entity';
 import { UserEntity } from 'src/entities/user.entity';
 import { UserAnswersEntity } from 'src/entities/user_answers.entity';
 import { Repository } from 'typeorm';
+import { AnswerQuestionDto, AnswerQuestionResponseDto } from './question.dto';
 
 @Injectable()
 export class QuestionService {
@@ -28,21 +29,31 @@ export class QuestionService {
         return await this.questionRepository.find({ relations: ["answers"] });
     }
 
-    async answerQuestion(userId: number, questionId: number, answerId: number): Promise<Boolean> {
+    async answerQuestion(userId: number, answerDto: AnswerQuestionResponseDto): Promise<Boolean> {
         const userAnswer = new UserAnswersEntity();
 
         userAnswer.user = await this.userRepository.findOneByOrFail({ "id": userId });
-        userAnswer.question = await this.questionRepository.findOneByOrFail({ "id": questionId });
-        
-        const answer = await this.answerRepository.findOne({ where:{"id": answerId}, relations: ["question"] });
-        if (!answer) {
-            throw "Answer does not exist"
-        }
-        if (answer.question.id != userAnswer.question.id) {
-            throw "Answer does not belong to question"
-        }
-        userAnswer.answer = answer;
-        await this.userAnswersRepository.save(userAnswer);
+
+        // Create transaction and save all answers at once
+        this.answerRepository.manager.transaction(async manager => {
+            const questionRepo = manager.getRepository(QuestionEntity)
+            const answerRepo = manager.getRepository(AnswerEntity)
+            const userAnswerRepo = manager.getRepository(UserAnswersEntity)
+
+            for (const { questionId, answerId } of answerDto.answers) {
+                userAnswer.question = await questionRepo.findOneByOrFail({ "id": questionId });
+
+                const answer = await answerRepo.findOne({ where: { "id": answerId }, relations: ["question"] });
+                if (!answer) {
+                    throw "Answer does not exist"
+                }
+                if (answer.question.id != userAnswer.question.id) {
+                    throw "Answer does not belong to question"
+                }
+                userAnswer.answer = answer;
+                await userAnswerRepo.save(userAnswer);
+            }
+        })
         return true
     }
 }
