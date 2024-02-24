@@ -41,7 +41,4 @@ export class UserController {
         return this.userService.getUser(session['user'].id);
     }
 
-    @Get("/schedule")
-    async schedule(@Req() request, @Session() session: Record<string, any>): Promise<any> {
-    }
 }

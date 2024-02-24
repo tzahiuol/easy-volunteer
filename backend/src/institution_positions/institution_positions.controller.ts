@@ -19,6 +19,11 @@ export class InstitutionPositionsController {
         return await this.instututionPositionService.addSchedule(id, session['user'].id);
     }
 
+    @Get("/schedule/timeslot/:id")
+    async get_timeslot_schedule(@Param('id') id: number): Promise<any> {
+        return await this.instututionPositionService.getTimeslotScheduleInformation(id);
+    }
+
     @Get("/filter/countries")
     async get_countries(): Promise<any> {
         return await this.instututionPositionService.getCountries();

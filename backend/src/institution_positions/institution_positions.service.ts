@@ -24,6 +24,10 @@ export class InstitutionPositionsService {
         return await this.institutionPositionTimeSlotRepo.find({ where: { users: { id: user_id } }, relations: ["institutionPosition"] })
     }
 
+    getTimeslotScheduleInformation(timeslot_schedule: number): any {
+        return this.institutionPositionTimeSlotRepo.findOne({ where: { id: timeslot_schedule }, relations: ["institutionPosition", "institutionPosition.position", "users","institutionPosition.institution"] })
+    }
+
     async addSchedule(institiution_position_timeslot_id: number, user_id: number): Promise<boolean> {
         const timeslot = await this.institutionPositionTimeSlotRepo.findOne({ where: { id: institiution_position_timeslot_id }, relations: ['institutionPosition', 'institutionPosition.position', 'users'] });
         const avaliable_positions = await this.userService.getUserAvaliablePositions(user_id);
