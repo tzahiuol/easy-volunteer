@@ -22,7 +22,7 @@ export default {
       name: 'quiz',
       displayName: 'Quiz',
       meta: {
-        icon: 'ion-help',
+        icon: 'mso-question_mark',
       },
     }
   ] as INavigationRoute[],

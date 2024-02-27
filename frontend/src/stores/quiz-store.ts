@@ -4,7 +4,7 @@ import requests from '../data/requests'
 interface Questions {
     id: number,
     question: string,
-    answers: Answers
+    answers: Answers[]
 }
 
 interface Answers {
