@@ -6,7 +6,7 @@ import AppLayout from '../layouts/AppLayout.vue'
 import RouteViewComponent from '../layouts/RouterBypass.vue'
 
 import { useAuthStore } from '../stores/auth-store'
-import { useQuestionsStore } from '../stores/questions-store'
+import { useQuizStore } from '../stores/quiz-store'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         'name': 'quiz',
         path: 'quiz',
-        component : () => import('../pages/questions/Questions.vue'),
+        component : () => import('../pages/quiz/Quiz.vue'),
       },
     ],
   },
@@ -72,7 +72,7 @@ const router = createRouter({
 // This is a global guard that checks if the user is logged in.
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
-  const questionsStore = useQuestionsStore();
+  const quizStore = useQuizStore();
   if (!to.path.includes('/auth/')) {
     if (authStore.isLoggedIn === null) {
       await authStore.getMe()
@@ -82,13 +82,13 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     // Reset questions store when navigating to auth pages to avoid bugs when signing out.
-    questionsStore.reset()
+    quizStore.reset()
   }
   if (to.path.includes('/panel/')){
-    if (questionsStore.shouldAnswerQuestions === null) {
-      await questionsStore.checkShouldAnswerQuestions()
+    if (quizStore.shouldAnswerQuestions === null) {
+      await quizStore.checkShouldAnswerQuestions()
     }
-    if (!to.path.includes('/panel/quiz') && questionsStore.shouldAnswerQuestions === true) {
+    if (!to.path.includes('/panel/quiz') && quizStore.shouldAnswerQuestions === true) {
       return next({ name: 'quiz' })
     }
   }

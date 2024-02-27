@@ -57,7 +57,7 @@ import { useRoute } from 'vue-router'
 import { useColors } from 'vuestic-ui'
 
 import navigationRoutes, { type INavigationRoute } from './NavigationRoutes'
-import { useQuestionsStore } from '../../stores/questions-store'
+import { useQuizStore } from '../../stores/quiz-store'
 
 
 export default defineComponent({
@@ -69,7 +69,7 @@ export default defineComponent({
   emits: ['update:visible'],
 
   setup: (props, { emit }) => {
-    const questionsStore = useQuestionsStore()
+    const quizStore = useQuizStore()
     const { getColor, colorToRgba } = useColors()
     const route = useRoute()
 
@@ -94,7 +94,7 @@ export default defineComponent({
       (value.value = navigationRoutes.routes.map((route: INavigationRoute) => routeHasActiveChild(route)))
 
     const shownNavigationRoutes = computed(() => {
-      if (questionsStore.shouldAnswerQuestions) {
+      if (quizStore.shouldAnswerQuestions) {
         return navigationRoutes.routes.filter((route) => route.name === 'quiz')
       }
       return navigationRoutes.routes

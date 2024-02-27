@@ -13,7 +13,7 @@ interface Answers {
     order: number,
 }
 
-export const useQuestionsStore = defineStore('questions', {
+export const useQuizStore = defineStore('questions', {
     state: () => {
         return {
             questions: [],
