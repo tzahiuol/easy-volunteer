@@ -18,9 +18,29 @@
           <VaCard color="primary" gradient class="item">
             <VaCardTitle>{{ questions[questionIndex].question }} </VaCardTitle>
             <VaCardContent>
-              <div v-for="answer in sortedAnswers" class="pt-2"
-                @click="choosenAnswer(questions[questionIndex], answer)">
-                <p :style=" choosenAnswerId === answer.id ? 'color:var(--va-text-primary)' : ''" class="cursor-pointer">{{ answer.answer }}</p>
+              <div v-for="answer in sortedAnswers" class="pt-2" @click="choosenAnswer(questions[questionIndex], answer)">
+                <p :style="choosenAnswerId === answer.id ? 'color:var(--va-text-primary)' : ''" class="cursor-pointer">{{
+                  answer.answer }}</p>
+              </div>
+            </VaCardContent>
+          </VaCard>
+        </div>
+      </div>
+    </Transition>
+  </div>
+  <div v-if="shouldShowDoneSection" class="pt-3">
+    <Transition name="slide-fade">
+      <div class="row">
+        <div class="flex flex-col md6">
+          <VaCard color="primary" gradient class="item">
+            <VaCardTitle>Results </VaCardTitle>
+            <VaCardContent>
+              <p>The skills and positions that we identified by the quiz are </p>
+              <div class="row">
+                <div v-for="skillOrPosition in presentedSkillsAndPositions" class="pt-2">
+                  <VaBadge :text="skillOrPosition.name" :color="skillOrPosition.type === 'position' ? 'primary' : 'success'" class="mr-2" />
+                </div>
+
               </div>
             </VaCardContent>
           </VaCard>
@@ -34,19 +54,22 @@
 <script lang="ts" setup>
 import { watch, ref, computed, Ref } from 'vue'
 import { useQuizStore } from '../../stores/quiz-store'
+import requests from '../../data/requests'
+import _ from 'lodash';
 
 const quizClick = new Audio('/quiz_click.mp3')
 const clappingSound = new Audio('/clapping_sound.mp3')
 
 const shouldShowQuestionsSection = ref(false)
+const shouldShowDoneSection = ref(true)
 const showQuestion = ref(false)
 
 const animateQuestion = (shouldSkipQuestion: boolean) => {
-  const startTimer = shouldSkipQuestion ? 0 : 900
+  const startTimer = shouldSkipQuestion ? 900 : 0
   showQuestion.value = false
   setTimeout(() => {
     setTimeout(() => {
-      if (!shouldSkipQuestion) {
+      if (shouldSkipQuestion) {
         questionIndex.value++
       }
       showQuestion.value = true
@@ -56,7 +79,7 @@ const animateQuestion = (shouldSkipQuestion: boolean) => {
 
 watch(shouldShowQuestionsSection, (value) => {
   if (value) {
-    animateQuestion(true)
+    animateQuestion(false)
   }
 })
 const questionIndex = ref(0)
@@ -66,6 +89,7 @@ const quizStore = useQuizStore()
 
 quizStore.getQuestions()
 
+
 const answers: Ref<{ questionId: number, answerdId: number }[]> = ref([])
 
 const questions = computed(() => quizStore.questions)
@@ -74,18 +98,32 @@ const sortedAnswers = computed(() => {
     return a.order - b.order
   })
 })
+const positions = computed(() => ['Chef', 'Body'])
+const skills = computed(() => ['Cooking', 'Cleaning'])
 
-const choosenAnswer = (question: any, answer: any) => {
+const presentedSkillsAndPositions = computed(() => {
+  const newPositions = positions.value.map((position) => {
+    return { name: position, type: 'position' }
+  })
+  const newSkills = skills.value.map((skill) => {
+    return { name: skill, type: 'skill' }
+  })
+  return _.shuffle(newPositions.concat(newSkills));
+})
+
+const choosenAnswer = async (question: any, answer: any) => {
   choosenAnswerId.value = answer.id
   quizClick.currentTime = 0
   quizClick.play()
   answers.value.push({ questionId: question.id, answerdId: answer.id })
   if (questionIndex.value < questions.value.length - 1) {
-    animateQuestion(false)
+    animateQuestion(true)
   } else {
-    console.log(answers)
     clappingSound.currentTime = 2
     clappingSound.play()
+    await requests.question.answer(answers.value)
+    shouldShowQuestionsSection.value = false;
+    shouldShowDoneSection.value = true;
   }
 }
 
