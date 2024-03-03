@@ -1,4 +1,4 @@
-# easy-voulnteer
+# easy-volunteer
 
 ## Description
 
