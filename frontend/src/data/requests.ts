@@ -34,17 +34,12 @@ export default {
             return await axios.get(`/api/institution-positions/schedule/timeslot/${timeSlotId}`);
         },
         getFilterCountries: async () => {
-            return await axios.get('/api/institution-positions/filter/countries');
+            return (await axios.get('/api/institution-positions/filter/countries')).data;
         },
-        filter: async (country_code: string, city: string, from?: Date, to?: Date) => {
-            const data: { country_code: string; city: string; from?: string; to?: string } = { country_code, city, }
-            if (from) {
-                data.from = from.toISOString();
-            }
-            if (to) {
-                data.to = to.toISOString();
-            }
-            return await axios.post('/api/institution-positions/filter', data);
+        filter: async (filteringObject: { country_code?: string, city?: string, from?: Date, to?: Date }) => {
+            const formattedFrom = filteringObject.from?.toISOString();
+            const formattedTo = filteringObject.to?.toISOString();
+            return (await axios.post('/api/institution-positions/filter', { ...filteringObject, from: formattedFrom, to: formattedTo })).data;
         }
     }
 
