@@ -1,9 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, ManyToMany, JoinTable, Unique } from 'typeorm';
-import { QuestionEntity } from './question.entity';
-import { UserAnswersEntity } from './user_answers.entity';
-import { SkillEntity } from './skill';
 import { UserEntity } from './user.entity';
-import { PositionEntity } from './position.entity';
 import { InstitutionPositionEntity } from './institution_position';
 
 @Entity({name:"institutions"})
@@ -23,5 +19,8 @@ export class InstitutionEntity {
 
     @OneToMany(type => InstitutionPositionEntity, instpos => instpos.institution, { onDelete: 'CASCADE' })
     institutionPositions: InstitutionPositionEntity[];
+
+    @Column()
+    description: string;
 
 }

@@ -23,15 +23,20 @@ export default {
             return await axios.post('/api/question/answer', { answers: questionsAndAnswers });
         },
     },
-    positions: {
+    schedule: {
         getSchedule: async () => {
-            return await axios.get('/api/positions/schedule');
-        },
-        scheduleTimeSlot: async (timeSlotId: number) => {
-            return await axios.post(`/api/institution-positions/schedule/timeslot/${timeSlotId}`);
+            return (await axios.get('/api/institution-positions/schedule')).data;
         },
         getScheduleTimeSlotInformation: async (timeSlotId: number) => {
             return await axios.get(`/api/institution-positions/schedule/timeslot/${timeSlotId}`);
+        },
+    },
+    positions: {
+        scheduleTimeSlot: async (timeSlotId: number) => {
+            return await axios.post(`/api/institution-positions/schedule/timeslot/${timeSlotId}`);
+        },
+        cancelTimeSlot:  async (timeSlotId: number) => {
+            return await axios.post(`/api/institution-positions/cancel/timeslot/${timeSlotId}`);
         },
         getFilterCountries: async () => {
             return (await axios.get('/api/institution-positions/filter/countries')).data;

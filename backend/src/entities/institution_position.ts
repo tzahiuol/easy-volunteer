@@ -33,4 +33,7 @@ export class InstitutionPositionEntity {
     @Column()
     fullAddress: string;
 
+    @Column()
+    description: string;
+
 }

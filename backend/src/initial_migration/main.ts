@@ -24,7 +24,6 @@ const positions = [{ name: "Head Cook", skill: "Cooking" },
 { name: "Courier", skill: "Carrier" },
 { name: "Warehouse Worker", skill: "Carrier++" },
 { name: "Carpenter's Assistant", skill: "Carrier++" },
-{ name: "Maintenance Worker", skill: "Carrier++" },
 { name: "Animal Shelter Volunteer", skill: "Animal Handling" },
 { name: "Pet Therapy Volunteer", skill: "Animal Handling" },
 { name: "Zoo Volunteer", skill: "Animal Handling" }]
@@ -75,6 +74,93 @@ const questions = [
     //         [{ "text": "Sure, but its not really my thing", }, { "text": "I would love to contribute my time helping clean the world!" },]
     // }
 ]
+const institutions = [
+    {
+        name: "Caring Hearts Foundation",
+        description: "Dedicated to providing essential support and care to those in need.",
+        institution_positions: [
+            {
+                name: "Nourish the Needy",
+                description: "Join our team of compassionate chefs to prepare and deliver nutritious meals for the elderly.",
+                position: positions[0],
+                country_code: "UK",
+                city: "London",
+                full_address: "456 Kindness Lane, London, UK",
+            },
+            {
+                name: "Tech for All",
+                description: "Use your computer skills to assist individuals and organizations in need of technical support and solutions.",
+                position: positions[1],
+                country_code: "CA",
+                city: "Toronto",
+                full_address: "789 Innovation Street, Toronto, CA",
+            },
+            {
+                name: "Drive to Thrive",
+                description: "Help us make a difference by driving and delivering essential supplies to communities in need.",
+                position: positions[2],
+                country_code: "AU",
+                city: "Sydney",
+                full_address: "101 Journey Road, Sydney, AU",
+            },
+            {
+                name: "Helping Hands Helpline",
+                description: "Support individuals in crisis by volunteering for our helpline and providing a listening ear.",
+                position: positions[3],
+                country_code: "IN",
+                city: "Mumbai",
+                full_address: "567 Empathy Avenue, Mumbai, IN",
+            },
+            {
+                name: "Educate Tomorrow",
+                description: "Make a positive impact on young minds by becoming a tutor or homework helper for children in need.",
+                position: positions[4],
+                country_code: "FR",
+                city: "Paris",
+                full_address: "234 Knowledge Square, Paris, FR",
+            },
+        ]
+    },
+    {
+        name: "Global Compassion Network",
+        description: "Connecting compassionate individuals worldwide to create a global network of support and care.",
+        institution_positions: [
+            {
+                name: "Swift Courier Relief",
+                description: "Join our courier team to provide swift relief by delivering essential supplies to those in need.",
+                position: positions[5],
+                country_code: "DE",
+                city: "Berlin",
+                full_address: "789 Express Lane, Berlin, DE",
+            },
+            {
+                name: "Shelter Builders Collective",
+                description: "Assist in building shelters and homes for communities facing housing challenges.",
+                position: positions[7],
+                country_code: "JP",
+                city: "Tokyo",
+                full_address: "345 Carpentry Avenue, Tokyo, JP",
+            },
+            {
+                name: "Animal Guardians Society",
+                description: "Become a volunteer to care for and protect animals in shelters, promoting animal welfare.",
+                position: positions[8],
+                country_code: "MX",
+                city: "Mexico City",
+                full_address: "901 Pet Care Boulevard, Mexico City, MX",
+            },
+            {
+                name: "Joyful Paws Project",
+                description: "Spread joy and comfort by volunteering in local zoos and participating in pet therapy programs.",
+                position: positions[9],
+                country_code: "ZA",
+                city: "Cape Town",
+                full_address: "112 Zoo Lane, Cape Town, ZA",
+            }
+        ]
+    }
+];
+
 async function createQuestionsAndPositions(app: INestApplicationContext) {
     const questionRepo: Repository<QuestionEntity> = app.get(getRepositoryToken(QuestionEntity));
     const answersRepo: Repository<AnswerEntity> = app.get(getRepositoryToken(AnswerEntity));
@@ -146,49 +232,37 @@ async function createQuestionsAndPositions(app: INestApplicationContext) {
     }
 }
 
-function generateDateRange() {
+function generateRandomDateRange() {
     const dateRanges = [];
 
     // Get today's date
     const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + 2); // Start from 2 days from now
+    currentDate.setDate(currentDate.getDate() + -2); // Start from 2 days ago
 
-    // Calculate date for 3 weeks from now
+    const amountOfDays = getRandomNumber(5, 30)
     const endDate = new Date(currentDate);
-    endDate.setDate(currentDate.getDate() + 21);
+    endDate.setDate(currentDate.getDate() + amountOfDays);
 
     // Generate date ranges for every other day
     while (currentDate < endDate) {
         const fromDate = new Date(currentDate);
-        fromDate.setHours(13, 0, 0, 0);
+        const start = getRandomNumber(8,10)
+        const delta = getRandomNumber(1, 3)
+        fromDate.setHours(start, 0, 0, 0);
 
         const toDate = new Date(currentDate);
-        toDate.setHours(18, 0, 0, 0);
+        toDate.setHours(start + delta, 0, 0, 0);
 
         dateRanges.push({ from: fromDate, to: toDate });
 
-        // Move to the next other day
-        currentDate.setDate(currentDate.getDate() + 2);
+        const amountOfDaysToJump = getRandomNumber(1, 5)
+        // Move to the next day
+        currentDate.setDate(currentDate.getDate() + amountOfDaysToJump);
     }
 
     return dateRanges;
 }
 
-const institutions = [
-    {
-        name: "Cooks for you",
-        institution_positions: [
-            {
-                name: "Cooking for the elderly",
-                position: positions[0],
-                country_code: "UK",
-                city: "London",
-                full_address: "123 Fake Street, London, UK",
-                slots: generateDateRange()
-            }
-        ]
-    }
-]
 function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -203,12 +277,14 @@ async function CreateInstitutionAndInstitutionPositions(app: INestApplicationCon
     for (let institution of institutions) {
         const institutionEntity = new InstitutionEntity()
         institutionEntity.name = institution.name
+        institutionEntity.description = institution.description
         await institutionRepo.save(institutionEntity)
 
-        console.log("Creating positions for institution")
+        console.log(`Creating positions for institution ${institutionEntity.name}`)
         for (const instPosition of institution.institution_positions) {
             const institutionPositionEntity = new InstitutionPositionEntity()
             institutionPositionEntity.name = instPosition.name
+            institutionPositionEntity.description = instPosition.description
             institutionPositionEntity.institution = institutionEntity
             const position = await positionRepo.findOneBy({ name: instPosition.position.name })
             institutionPositionEntity.position = position
@@ -217,8 +293,7 @@ async function CreateInstitutionAndInstitutionPositions(app: INestApplicationCon
             institutionPositionEntity.fullAddress = instPosition.full_address
             await institutionPositionRepo.save(institutionPositionEntity)
 
-            console.log("Creating time slots for position")
-            for (const slot of instPosition.slots) {
+            for (const slot of generateRandomDateRange()) {
                 const slotEntity = new InstitutionPositionTimeSlotEntity()
                 slotEntity.from = slot.from
                 slotEntity.to = slot.to

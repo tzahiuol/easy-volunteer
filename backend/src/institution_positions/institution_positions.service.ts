@@ -28,6 +28,14 @@ export class InstitutionPositionsService {
         return this.institutionPositionTimeSlotRepo.findOne({ where: { id: timeslot_schedule }, relations: ["institutionPosition", "institutionPosition.position", "users","institutionPosition.institution"] })
     }
 
+    async cancelSchedule(institiution_position_timeslot_id: number, user_id: number): Promise<any> {
+        // get the timeslot, and delete the user from the timeslot
+        const timeslot = await this.institutionPositionTimeSlotRepo.findOne({ where: { id: institiution_position_timeslot_id }, relations: ['users'] });
+        const user = await this.userRepo.findOne({ where: { id: user_id } });
+        timeslot.users = timeslot.users.filter((user) => user.id !== user_id);
+        await this.institutionPositionTimeSlotRepo.save(timeslot);
+    }
+
     async addSchedule(institiution_position_timeslot_id: number, user_id: number): Promise<boolean> {
         const timeslot = await this.institutionPositionTimeSlotRepo.findOne({ where: { id: institiution_position_timeslot_id }, relations: ['institutionPosition', 'institutionPosition.position', 'users'] });
         const avaliable_positions = await this.userService.getUserAvaliablePositions(user_id);
@@ -68,8 +76,10 @@ export class InstitutionPositionsService {
 
         const query = this.institutionPositionTimeSlotRepo.createQueryBuilder("institution_position_timeslot")
         query.innerJoinAndSelect("institution_position_timeslot.institutionPosition", "institution_position")
+        query.leftJoinAndSelect("institution_position_timeslot.users", "users")
 
         query.innerJoinAndSelect("institution_position.position", "position")
+        query.innerJoinAndSelect("institution_position.institution", "institution")
         query.where("position.id IN (:...positions)", { positions: avaliable_positions.map((pos) => pos.id) })
         if ( filterInstitutionPositionRequestDto.country_code) {
             query.andWhere("country_code = :country_code", { country_code: filterInstitutionPositionRequestDto.country_code })
@@ -86,11 +96,15 @@ export class InstitutionPositionsService {
             query.andWhere(" institution_position_timeslot.to <= STR_TO_DATE( :to , '%Y-%m-%d' ) ", { to: filterInstitutionPositionRequestDto.to })
         }
 
-        query.limit(10)
-
-        console.log(query.getSql())
-        console.log(query.getParameters())
-        return query.getMany()
+        const data : any = await query.getMany()
+        
+        
+        return data.map((position) => {
+            position.isAlreadyInPosition = position.users.find((user) => user.id === user_id) !== undefined
+            position.amountOfUsers = position.users.length
+            delete position.users
+            return position
+        })
 
     }
     

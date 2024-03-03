@@ -24,6 +24,22 @@ export default {
       meta: {
         icon: 'mso-question_mark',
       },
-    }
+    },
+    {
+      name: 'schedule',
+      displayName: 'Your Schedule',
+      meta: {
+        icon: 'mso-calendar_today',
+      },
+    },
+    {
+      name: 'profile',
+      displayName: 'Your Profile',
+      meta: {
+        icon: 'mso-account_circle',
+      },
+    },
+    
+    
   ] as INavigationRoute[],
 }

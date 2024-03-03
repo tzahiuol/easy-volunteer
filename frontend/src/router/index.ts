@@ -20,14 +20,24 @@ const routes: Array<RouteRecordRaw> = [
     redirect: { name: 'find' },
     children: [
       {
-        'name': 'find',
+        name: 'find',
         path: 'find',
         component : () => import('../pages/find/Find.vue'),
       },
       {
-        'name': 'quiz',
+        name: 'quiz',
         path: 'quiz',
         component : () => import('../pages/quiz/Quiz.vue'),
+      },
+      {
+        name: 'schedule',
+        path: 'schedule',
+        component : () => import('../pages/schedule/Schedule.vue'),
+      },
+      {
+        name: 'profile',
+        path: 'profile',
+        component : () => import('../pages/profile/Profile.vue'),
       },
     ],
   },

@@ -19,6 +19,11 @@ export class InstitutionPositionsController {
         return await this.instututionPositionService.addSchedule(id, session['user'].id);
     }
 
+    @Post("/cancel/timeslot/:id")
+    async cancel_schedule(@Param('id') id: number, @Session() session: Record<string, any>): Promise<any> {
+        return await this.instututionPositionService.cancelSchedule(id, session['user'].id);
+    }
+
     @Get("/schedule/timeslot/:id")
     async get_timeslot_schedule(@Param('id') id: number): Promise<any> {
         return await this.instututionPositionService.getTimeslotScheduleInformation(id);

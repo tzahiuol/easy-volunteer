@@ -7,11 +7,13 @@ interface CountriesWithCities {
     cities: string[]
 }
 
-interface AvaliablePositions {
+export interface AvaliablePositions {
     id: number
-    from: string
-    to: string
+    from: Date
+    to: Date
     amountRequired: number
+    amountOfUsers: number
+    isAlreadyInPosition: boolean
     institutionPosition: InstitutionPosition
 }
 
@@ -19,14 +21,24 @@ interface InstitutionPosition {
     id: number
     name: string
     country_code: string
+    description: string
+
     city: string
     fullAddress: string
     position: Position
-}
-
+    institution: Institution
+  }
+  
 interface Position {
     id: number
     name: string
+  }
+  
+interface Institution {
+    id: number
+    name: string
+    logo: any
+    description: string
 }
 
 export const useFindStore = defineStore('find', {
@@ -48,7 +60,13 @@ export const useFindStore = defineStore('find', {
 
         async getAvaliablePositions(country_code?: string, city?: string, from?: Date, to?: Date) {
             const data = await requests.positions.filter({ country_code, city, from, to })
-            this.avaliablePositions = data
+
+            const newData = data.map((position: any) => ({
+                ...position,
+                from: new Date(position.from),
+                to: new Date(position.to)
+            }))
+            this.avaliablePositions = newData
         }
     },
 })
