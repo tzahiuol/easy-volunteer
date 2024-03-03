@@ -11,7 +11,9 @@ const FileStore = require('session-file-store')(session);
 
 async function bootstrap() {
   const temp_session_path = "/tmp/sessions"
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'warn', 'log', 'debug', 'verbose'],
+  });
 
   app.setGlobalPrefix('/api/')
   app.useGlobalFilters(new UserErrorMessageFilter());

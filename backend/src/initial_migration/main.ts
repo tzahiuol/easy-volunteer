@@ -16,7 +16,18 @@ import { InstitutionPositionEntity } from 'src/entities/institution_position';
 import { InstitutionPositionTimeSlotEntity } from 'src/entities/institution_position_timeslot';
 import { UserEntity } from 'src/entities/user.entity';
 
-const positions = [{ name: "Head Cook", skill: "Cooking" }]
+const positions = [{ name: "Head Cook", skill: "Cooking" },
+{ name: "Computer helpdesk", skill: "Computer Geek" },
+{ name: "Driver", skill: "Driving" },
+{ name: "Crisis Hotline Volunteer", skill: "People Person" },
+{ name: "Tutor or Homework Helper", skill: "Children Care" },
+{ name: "Courier", skill: "Carrier" },
+{ name: "Warehouse Worker", skill: "Carrier++" },
+{ name: "Carpenter's Assistant", skill: "Carrier++" },
+{ name: "Maintenance Worker", skill: "Carrier++" },
+{ name: "Animal Shelter Volunteer", skill: "Animal Handling" },
+{ name: "Pet Therapy Volunteer", skill: "Animal Handling" },
+{ name: "Zoo Volunteer", skill: "Animal Handling" }]
 
 //  Position -> Skill
 //  Answer -> Skill
@@ -41,7 +52,7 @@ const questions = [
     },
     {
         "text": "Do you have a driver license?", answers:
-            [{ "text": "Nope", }, { "text": "Yes!", skills: ['Driver'] }, { "text": "Yes, and i also have my own car", skills: ['Driver', 'Driver+Car'] }]
+            [{ "text": "Nope", }, { "text": "Yes!", skills: ['Driving'] }]
     },
     {
         "text": "Are you good with people?", answers:
@@ -52,24 +63,18 @@ const questions = [
             [{ "text": "Not really", }, { "text": "No, but would be happy to volnuteer and help children", skills: ['Children Care'] }, { "text": "Yes, a lot, kids are the best", skills: ['Children Care'] }]
     },
     {
-        "text": "What do you think about voulnteering in hopsitals?", answers:
-            [{ "text": "I dont think so", }, { "text": "Sure, will be happy to give it a go, making sick people happy is my goal!", skills: ['Medical Clown'] }]
-    },
-    {
         "text": "Physical work?", answers:
-            [{ "text": "Physical? not really my thing", }, { "text": "I can lift, but not too heavy", skills: ['Carrier'] }, { "text": "I can lift, brah!",  skills: ['Carrier', 'Heavy Carrier'] }]
+            [{ "text": "Physical? not really my thing", }, { "text": "I can lift, but not too heavy", skills: ['Carrier'] }, { "text": "I can lift, brah!", skills: ['Carrier', 'Carrier++'] }]
     },
     {
         "text": "Are you good with animals?", answers:
-            [{ "text": "Not really", }, { "text": "Only cats and dogs", skills: ['Animal Lover'] }, { "text": "Sure, love them all!", skills: ['All Animals Lover'] }]
+            [{ "text": "Not really", }, { "text": "Only cats and dogs", skills: ['Animal Handling'] }, { "text": "Sure, love them all!", skills: ['Animal Handling'] }]
     },
     // {
     //     "text": "Is keeping the world clean important for you?", answers:
     //         [{ "text": "Sure, but its not really my thing", }, { "text": "I would love to contribute my time helping clean the world!" },]
     // }
 ]
-const skills = ["Cooking", "Computer Geek", "Driver", "Driver+Car", "People Person", "Children Care", "Medical Clown", 'Carrier', 'Heavy Carrier', 'Animal Lover','All Animals Lover']
-
 async function createQuestionsAndPositions(app: INestApplicationContext) {
     const questionRepo: Repository<QuestionEntity> = app.get(getRepositoryToken(QuestionEntity));
     const answersRepo: Repository<AnswerEntity> = app.get(getRepositoryToken(AnswerEntity));
@@ -78,27 +83,36 @@ async function createQuestionsAndPositions(app: INestApplicationContext) {
     const institutionRepo: Repository<InstitutionEntity> = app.get(getRepositoryToken(InstitutionEntity));
     const institutionPositionRepo: Repository<InstitutionPositionEntity> = app.get(getRepositoryToken(InstitutionPositionEntity));
     const InstitutionPositionTimeSlotRepo: Repository<InstitutionPositionTimeSlotEntity> = app.get(getRepositoryToken(InstitutionPositionTimeSlotEntity));
-    const userRepo : Repository<UserEntity> = app.get(getRepositoryToken(UserEntity))
-    const amountOfQuestions = await questionRepo.count()
+    const userRepo: Repository<UserEntity> = app.get(getRepositoryToken(UserEntity))
 
     console.log("Deleting all questions related")
-    if (amountOfQuestions > 0) {
-        await InstitutionPositionTimeSlotRepo.delete({})
-        await institutionPositionRepo.delete({})
-        await institutionRepo.delete({})
-        await positionRepo.delete({})
-        await questionRepo.delete({})
-        await answersRepo.delete({})
-        await skillRepo.delete({})
-        await userRepo.delete({})
-    }
+    await InstitutionPositionTimeSlotRepo.delete({})
+    await institutionPositionRepo.delete({})
+    await institutionRepo.delete({})
+    await positionRepo.delete({})
+    await questionRepo.delete({})
+    await answersRepo.delete({})
+    await skillRepo.delete({})
+    await userRepo.delete({})
 
     const savedSkills: { [key: string]: SkillEntity } = {}
 
     console.log("Creating skills")
+    const skills = new Set<string>()
+    for (const question of questions) {
+        for (const answer of question.answers) {
+            if (answer.skills) {
+                for (const skill of answer.skills) {
+                    skills.add(skill)
+                }
+            }
+        }
+    } 
+
     for (const skill of skills) {
         const skillEntity = new SkillEntity()
         skillEntity.name = skill
+        console.log(`Creating skill ${skillEntity.name}`)
         savedSkills[skillEntity.name] = await skillRepo.save(skillEntity)
     }
     console.log("Creating positions")
@@ -106,6 +120,8 @@ async function createQuestionsAndPositions(app: INestApplicationContext) {
         const positionEntity = new PositionEntity()
         positionEntity.name = position.name
         positionEntity.requiredSkill = savedSkills[position.skill]
+
+        console.log(`Creating position ${positionEntity.name}`)
         await positionRepo.save(positionEntity)
     }
 

@@ -13,7 +13,7 @@ export class PositionEntity {
     @Column()
     name: string;
     
-    @OneToOne(() => SkillEntity)
+    @ManyToOne(() => SkillEntity)
     @JoinColumn()
     requiredSkill: SkillEntity;
 

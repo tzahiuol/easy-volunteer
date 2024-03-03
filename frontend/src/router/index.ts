@@ -11,18 +11,18 @@ import { useQuizStore } from '../stores/quiz-store'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/:pathMatch(.*)*',
-    redirect: { name: 'filter' },
+    redirect: { name: 'find' },
   },
   {
     name: 'panel',
     path: '/panel/',
     component: AppLayout,
-    redirect: { name: 'filter' },
+    redirect: { name: 'find' },
     children: [
       {
-        'name': 'filter',
-        path: 'filter',
-        component : () => import('../pages/filter/Filter.vue'),
+        'name': 'find',
+        path: 'find',
+        component : () => import('../pages/find/Find.vue'),
       },
       {
         'name': 'quiz',

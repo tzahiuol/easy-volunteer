@@ -56,7 +56,7 @@ const submit = async () => {
       init({ message: "An error occurred", color: 'error' })
       return
     }
-    push({ name: 'filter' })
+    push({ name: 'find' })
   }
 }
 </script>

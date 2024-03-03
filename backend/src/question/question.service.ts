@@ -30,9 +30,7 @@ export class QuestionService {
     }
 
     async answerQuestion(userId: number, answerDto: AnswerQuestionResponseDto): Promise<Boolean> {
-        const userAnswer = new UserAnswersEntity();
-
-        userAnswer.user = await this.userRepository.findOneByOrFail({ "id": userId });
+        const user = await this.userRepository.findOneByOrFail({ "id": userId });
 
         // Create transaction and save all answers at once
         this.answerRepository.manager.transaction(async manager => {
@@ -41,6 +39,8 @@ export class QuestionService {
             const userAnswerRepo = manager.getRepository(UserAnswersEntity)
 
             for (const { questionId, answerId } of answerDto.answers) {
+                const userAnswer = new UserAnswersEntity();
+                userAnswer.user = user;
                 userAnswer.question = await questionRepo.findOneByOrFail({ "id": questionId });
 
                 const answer = await answerRepo.findOne({ where: { "id": answerId }, relations: ["question"] });

@@ -12,10 +12,10 @@ export default {
   },
   routes: [
     {
-      name: 'filter',
-      displayName: 'Filter',
+      name: 'find',
+      displayName: 'Find',
       meta: {
-        icon: 'vuestic-iconset-dashboard',
+        icon: 'mso-location_on',
       },
     },
     {

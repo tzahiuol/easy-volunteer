@@ -9,7 +9,7 @@ export default {
             return await axios.post('/api/user/login', { email, password });
         },
         me: async () => {
-            return await axios.get('/api/user/me');
+            return (await axios.get('/api/user/me')).data;
         }
     },
     question: {

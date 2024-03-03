@@ -62,7 +62,8 @@ export class UserService {
     }
 
     async getUserAvaliablePositions(user_id: number): Promise<PositionEntity[]> {
-        const data = await this.connection.createQueryRunner()
+        const queryRunner = this.connection.createQueryRunner()
+        const data = await queryRunner
             .query(`
                 SELECT positions.name, positions.id FROM users
                 join user_answers on users.id = user_answers.userid
@@ -72,11 +73,13 @@ export class UserService {
                 join positions on skills.id = positions.requiredSkillId
             WHERE users.id = ?`, [user_id])
 
+        await queryRunner.release()
         return data
     }
 
     async getUserSkills(user_id: number): Promise<SkillEntity[]> {
-        const data = await this.connection.createQueryRunner()
+        const queryRunner = this.connection.createQueryRunner()
+        const data = await queryRunner
             .query(`
                 SELECT skills.name FROM users
                 join user_answers on users.id = user_answers.userid
@@ -85,6 +88,7 @@ export class UserService {
                 join skills on answer_skills.skillsid = skills.id
             WHERE users.id = ?`, [user_id])
 
+            await queryRunner.release()
         return data
     }
 }

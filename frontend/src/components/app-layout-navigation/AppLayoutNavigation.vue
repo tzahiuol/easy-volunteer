@@ -9,7 +9,7 @@
 
     <nav class="flex items-center">
       <VaBreadcrumbs>
-        <VaBreadcrumbsItem label="Home" :to="{ name: 'filter' }" />
+        <VaBreadcrumbsItem label="Home" :to="{ name: 'find' }" />
         <VaBreadcrumbsItem
           v-for="item in items"
           :key="item.label"
@@ -24,7 +24,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useColors } from 'vuestic-ui'
 import VaIconMenuCollapsed from '../icons/VaIconMenuCollapsed.vue'
 import { storeToRefs } from 'pinia'
@@ -35,7 +34,6 @@ const { isSidebarMinimized } = storeToRefs(useGlobalStore())
 
 const router = useRouter()
 const route = useRoute()
-const { t } = useI18n()
 
 type BreadcrumbNavigationItem = {
   label: string
@@ -70,7 +68,7 @@ const items = computed(() => {
       return
     }
     result.push({
-      label: t(labelKey),
+      label: labelKey,
       to: route.path,
       hasChildren: route.children && route.children.length > 0,
     })
