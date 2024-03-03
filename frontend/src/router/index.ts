@@ -3,8 +3,6 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import AuthLayout from '../layouts/AuthLayout.vue'
 import AppLayout from '../layouts/AppLayout.vue'
 
-import RouteViewComponent from '../layouts/RouterBypass.vue'
-
 import { useAuthStore } from '../stores/auth-store'
 import { useQuizStore } from '../stores/quiz-store'
 
@@ -84,7 +82,7 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
   const quizStore = useQuizStore();
   if (!to.path.includes('/auth/')) {
-    if (authStore.isLoggedIn === null) {
+    if (authStore.isLoggedIn === null || from.path.includes('/auth/')) {
       await authStore.getMe()
     }
     if (authStore.isLoggedIn === false) {

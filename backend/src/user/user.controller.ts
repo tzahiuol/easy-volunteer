@@ -19,6 +19,12 @@ export class UserController {
         return true;
     }
 
+    @Post('/logout')
+    async logout(@Session() session: Record<string, any>): Promise<Boolean> {
+        session['user'] = null;
+        return true;
+    }
+
     @Post("/register")
     async register(@Body() createUserDto: CreateUserDto, @Res() response): Promise<Boolean> {
         try {

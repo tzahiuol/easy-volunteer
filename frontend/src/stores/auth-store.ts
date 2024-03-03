@@ -38,6 +38,7 @@ export const useAuthStore = defineStore('auth', {
             try{
                 const data = await requests.user.me()
                 this.user = data;
+                this.isLoggedIn = true
             }catch (e){
                 this.isLoggedIn = false
             }

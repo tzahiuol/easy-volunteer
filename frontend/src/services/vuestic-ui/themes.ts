@@ -10,9 +10,5 @@ export default {
       danger: '#E42222',
       warning: '#FFD43A',
     },
-    dark: {
-      backgroundCardPrimary: '#111827',
-      backgroundCardSecondary: '#0f172a',
-    },
   },
 }

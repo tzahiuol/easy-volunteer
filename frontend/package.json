@@ -10,9 +10,7 @@
     "prelint": "npm run format",
     "lint": "eslint \"./src/**/*.{ts,js,vue}\" --fix",
     "format": "prettier --write .",
-    "preview": "vite preview",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "preview": "vite preview"
   },
   "lint-staged": {
     "./src/**/*.{ts,js,vue}": [
@@ -47,13 +45,6 @@
   },
   "devDependencies": {
     "@intlify/unplugin-vue-i18n": "^1.5.0",
-    "@storybook/addon-essentials": "^7.4.6",
-    "@storybook/addon-interactions": "^7.4.6",
-    "@storybook/addon-links": "^7.4.6",
-    "@storybook/blocks": "^7.4.6",
-    "@storybook/testing-library": "^0.2.2",
-    "@storybook/vue3": "^7.4.6",
-    "@storybook/vue3-vite": "^7.4.6",
     "@types/medium-editor": "^5.0.5",
     "@types/node": "^20.9.0",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
@@ -64,12 +55,10 @@
     "autoprefixer": "^10.4.13",
     "eslint": "^8.13.0",
     "eslint-plugin-prettier": "^5.0.1",
-    "eslint-plugin-storybook": "^0.6.15",
     "eslint-plugin-vue": "^9.18.1",
     "lint-staged": "^15.1.0",
     "postcss": "^8.4.21",
     "prettier": "^3.1.0",
-    "storybook": "^7.4.6",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.6",

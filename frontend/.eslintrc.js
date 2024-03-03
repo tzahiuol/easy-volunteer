@@ -18,8 +18,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:vue/vue3-recommended',
     '@vue/typescript/recommended',
-    '@vue/prettier',
-    'plugin:storybook/recommended',
+    '@vue/prettier'
   ],
 
   rules: {

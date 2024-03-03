@@ -8,6 +8,9 @@ export default {
         login: async (email: string, password: string) => {
             return await axios.post('/api/user/login', { email, password });
         },
+        logout: async () => {
+            return await axios.post('/api/user/logout');
+        },
         me: async () => {
             return (await axios.get('/api/user/me')).data;
         }
