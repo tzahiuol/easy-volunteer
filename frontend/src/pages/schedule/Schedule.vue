@@ -19,7 +19,7 @@
         <template #footer>
             <VaButton color="secondary" @click="showModal = false">Close</VaButton>
             <div class="pl-2">
-                <VaButton @click="cancelSubmission(selectedEvent)" color="danger">Delete event</VaButton>
+                <VaButton @click="cancelSubmission(selectedEvent)" color="danger">Cancel event</VaButton>
             </div>
         </template>
     </VaModal>

@@ -94,7 +94,7 @@ const findStore = useFindStore();
 const from = ref();
 const to = ref();
 
-const shouldDisablePastChanges = false;
+const shouldDisablePastChanges = true;
 
 const formatDatesToView = (fromDate: Date, toDate: Date) => {
   const fullOptions = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }
