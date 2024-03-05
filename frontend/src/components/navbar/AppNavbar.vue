@@ -11,9 +11,10 @@
             @click="isSidebarMinimized = !isSidebarMinimized"
           />
         </Transition>
-        <RouterLink to="/" aria-label="Visit home page">
-          <VuesticLogo />
-        </RouterLink>
+        <img src="/top-logo.png" style="height:55px"/>
+        <!-- <RouterLink to="/" aria-label="Visit home page">
+          
+        </RouterLink> -->
       </div>
     </template>
   </VaNavbar>
@@ -22,7 +23,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useGlobalStore } from '../../stores/global-store'
-import VuesticLogo from '../VuesticLogo.vue'
 
 defineProps({
   isMobile: { type: Boolean, default: false },
